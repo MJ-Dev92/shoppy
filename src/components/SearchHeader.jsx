@@ -2,6 +2,7 @@ import React from "react";
 import { FiShoppingBag } from "react-icons/fi";
 import { BsFillPencilFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { login } from "../api/firebase";
 export default function SearchHeader() {
   return (
     <header className="flex justify-between border-b border-gray-300 p-2">
@@ -15,7 +16,7 @@ export default function SearchHeader() {
         <Link to="products/new">
           <BsFillPencilFill className="text-2xl" />
         </Link>
-        <button>Login</button>
+        <button onClick={login}>Login</button>
       </nav>
     </header>
   );

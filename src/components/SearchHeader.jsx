@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FiShoppingBag } from "react-icons/fi";
 import { BsFillPencilFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import { login } from "../api/firebase";
+import { login, logout, onUserStateChange } from "../api/firebase";
+import { useState } from "react";
+
 export default function SearchHeader() {
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    onUserStateChange((user) => {
+      setUser(user);
+    });
+  }, []);
+  const handleLogin = () => {
+    login().then(setUser);
+  };
+  const handleLogout = () => {
+    logout().then(setUser);
+  };
+
   return (
     <header className="flex justify-between border-b border-gray-300 p-2">
       <Link to="/" className="flex items-center text-4xl text-brand">
@@ -16,7 +32,8 @@ export default function SearchHeader() {
         <Link to="products/new">
           <BsFillPencilFill className="text-2xl" />
         </Link>
-        <button onClick={login}>Login</button>
+        {!user && <button onClick={handleLogin}>Login</button>}
+        {user && <button onClick={handleLogout}>Logout</button>}
       </nav>
     </header>
   );

@@ -4,21 +4,14 @@ import { BsFillPencilFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { login, logout, onUserStateChange } from "../api/firebase";
 import { useState } from "react";
+import User from "./User";
 
 export default function SearchHeader() {
   const [user, setUser] = useState();
 
   useEffect(() => {
-    onUserStateChange((user) => {
-      setUser(user);
-    });
+    onUserStateChange(setUser);
   }, []);
-  const handleLogin = () => {
-    login().then(setUser);
-  };
-  const handleLogout = () => {
-    logout().then(setUser);
-  };
 
   return (
     <header className="flex justify-between border-b border-gray-300 p-2">
@@ -32,8 +25,9 @@ export default function SearchHeader() {
         <Link to="products/new">
           <BsFillPencilFill className="text-2xl" />
         </Link>
-        {!user && <button onClick={handleLogin}>Login</button>}
-        {user && <button onClick={handleLogout}>Logout</button>}
+        {user && <User user={user} />}
+        {!user && <button onClick={login}>Login</button>}
+        {user && <button onClick={logout}>Logout</button>}
       </nav>
     </header>
   );

@@ -10,7 +10,10 @@ export default function SearchHeader() {
   const [user, setUser] = useState();
 
   useEffect(() => {
-    onUserStateChange(setUser);
+    onUserStateChange((user) => {
+      console.log(user);
+      setUser(user);
+    });
   }, []);
 
   return (
@@ -21,13 +24,23 @@ export default function SearchHeader() {
       </Link>
       <nav className="flex items-center gap-4 font-semibold">
         <Link to="/products">Products</Link>
-        <Link to="carts">Carts</Link>
-        <Link to="products/new">
-          <BsFillPencilFill className="text-2xl" />
-        </Link>
+        {user && <Link to="carts">Carts</Link>}
+        {user && (
+          <Link to="products/new">
+            <BsFillPencilFill className="text-2xl" />
+          </Link>
+        )}
         {user && <User user={user} />}
-        {!user && <button onClick={login}>Login</button>}
-        {user && <button onClick={logout}>Logout</button>}
+        {!user && (
+          <button className="bg-brand w-[80px] h-10 rounded" onClick={login}>
+            Login
+          </button>
+        )}
+        {user && (
+          <button className="bg-brand w-[80px] h-10 rounded" onClick={logout}>
+            Logout
+          </button>
+        )}
       </nav>
     </header>
   );

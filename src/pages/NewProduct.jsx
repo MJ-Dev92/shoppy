@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { uploadImage } from "../api/uploader";
 
 export default function NewProduct() {
   const [product, setProduct] = useState({});
@@ -15,6 +16,9 @@ export default function NewProduct() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    uploadImage(file).then((url) => {
+      console.log(url);
+    });
   };
 
   return (
@@ -23,7 +27,7 @@ export default function NewProduct() {
       {file && <img src={URL.createObjectURL(file)} alt="local file" />}
       <form
         className="flex flex-col w-full items-center"
-        onChange={handleSubmit}
+        onSubmit={handleSubmit}
       >
         <input
           className="p-3 border-[3px] border-gray-300 mb-3 w-[95%]"
@@ -44,7 +48,7 @@ export default function NewProduct() {
         />
         <input
           className="p-3 border-[3px] border-gray-300 mb-3 w-[95%]"
-          type="text"
+          type="number"
           placeholder="가격"
           name="price"
           value={product.price ?? ""}

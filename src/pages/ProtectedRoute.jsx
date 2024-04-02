@@ -2,12 +2,15 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../components/context/AuthContext";
 
-export default function ProtectedRoute({ childeren, requireAdmin }) {
-  const { user } = useAuthContext();
-  console.log(childeren);
+export default function ProtectedRoute({ children, requireAdmin }) {
+  const { user, isLoading } = useAuthContext();
+
+  if (isLoading) {
+    return <div>Loding...</div>;
+  }
 
   if (!user || (requireAdmin && !user.isAdmin)) {
     return <Navigate to="/" replace />;
   }
-  return childeren;
+  return children;
 }

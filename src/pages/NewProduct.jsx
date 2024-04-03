@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { uploadImage } from "../api/uploader";
 import { addNewProduct } from "../api/firebase";
+import Button from "../components/ui/Button";
 
 export default function NewProduct() {
   const [product, setProduct] = useState({});
   const [file, setFile] = useState();
+  const [isUploading, setIsUploading] = useState(false);
+  const [success, setSuccess] = useState();
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -17,21 +20,34 @@ export default function NewProduct() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    uploadImage(file).then((url) => {
-      addNewProduct(product, url);
-    });
+    setIsUploading(true);
+    uploadImage(file) //
+      .then((url) => {
+        addNewProduct(product, url) //
+          .then(() => {
+            setSuccess("성공적으로 제품이 추가되었습니다.");
+            setTimeout(() => {
+              setSuccess(null);
+            }, 4000);
+          });
+      })
+      .finally(() => setIsUploading(false));
   };
 
   return (
-    <section className="flex flex-col items-center w-full h-full">
-      <h1 className="text-3xl p-5 font-bold ">새로운 제품 등록</h1>
-      {file && <img src={URL.createObjectURL(file)} alt="local file" />}
-      <form
-        className="flex flex-col w-full items-center"
-        onSubmit={handleSubmit}
-      >
+    <section className="w-full text-center">
+      <h2 className="text-2xl my-4 font-bold ">새로운 제품 등록</h2>
+      {success && <p className="my-2">✅{success}</p>}
+      {file && (
+        <img
+          className="w-96 mx-auto mb-2"
+          src={URL.createObjectURL(file)}
+          alt="local file"
+        />
+      )}
+      <form className="flex flex-col px-12" onSubmit={handleSubmit}>
         <input
-          className="p-3 border-[3px] border-gray-300 mb-3 w-[95%]"
+          className=""
           type="file"
           accept="img/*"
           name="file"
@@ -39,7 +55,7 @@ export default function NewProduct() {
           onChange={handleChange}
         />
         <input
-          className="p-3 border-[3px] border-gray-300 mb-3 w-[95%]"
+          className=""
           type="text"
           placeholder="제품명"
           name="title"
@@ -48,7 +64,7 @@ export default function NewProduct() {
           onChange={handleChange}
         />
         <input
-          className="p-3 border-[3px] border-gray-300 mb-3 w-[95%]"
+          className=""
           type="number"
           placeholder="가격"
           name="price"
@@ -57,7 +73,7 @@ export default function NewProduct() {
           onChange={handleChange}
         />
         <input
-          className="p-3 border-[3px] border-gray-300 mb-3 w-[95%]"
+          className=""
           type="text"
           placeholder="카테고리"
           name="category"
@@ -66,7 +82,7 @@ export default function NewProduct() {
           onChange={handleChange}
         />
         <input
-          className="p-3 border-[3px] border-gray-300 mb-3 w-[95%]"
+          className=""
           type="text"
           placeholder="제품 설명"
           name="description"
@@ -75,7 +91,7 @@ export default function NewProduct() {
           onChange={handleChange}
         />
         <input
-          className="p-3 border-[3px] border-gray-300 mb-3 w-[95%]"
+          className=""
           type="text"
           placeholder="옵션들(콤마(,)로 구분"
           name="options"
@@ -83,9 +99,10 @@ export default function NewProduct() {
           required
           onChange={handleChange}
         />
-        <button className="bg-brand text-white py-2 px-4 rounded hover:brightness-110 w-[95%]">
-          제품 등록하기
-        </button>
+        <Button
+          text={isUploading ? "업로드중..." : "제품 등록하기"}
+          disabled={isUploading}
+        />
       </form>
     </section>
   );

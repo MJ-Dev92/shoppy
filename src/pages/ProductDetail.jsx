@@ -1,42 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Button from "../components/ui/Button";
 
 export default function ProductDetail() {
   const {
-    state: { product },
+    state: {
+      product: { title, image, price, description, options, category, id },
+    },
   } = useLocation();
-  const { title, image, price, description, options, category } = product;
-  console.log(options);
+  const [selected, setSelected] = useState(options && options[0]);
+  const handleSelect = (e) => {
+    setSelected(e.target.value);
+  };
+  const handleClick = (e) => {
+    // 여기 장바구니 추가
+  };
 
   return (
-    <section className="px-7">
-      <div className="p-3">{category}</div>
-      <article className="flex flex-row gap-10">
-        <div>
-          <img src={image} alt={title} />
-        </div>
-        <div className="w-[30%] pt-4">
-          <p className="text-4xl mb-3">{title}</p>
-          <p className="text-4xl border-b-[3px] border-gray-300 w-full pb-3 mb-4">
+    <>
+      <p className="mx-12 mt-4 text-gray-700">{category}</p>
+      <section className="flex flex-col md:flex-row p-4">
+        <img className="w-full px-4 basis-7/12" src={image} alt={title} />
+        <div className="w-full basis-5/12 flex flex-col">
+          <h2 className="text-3xl font-bold py-2">{title}</h2>
+          <p className="text-2xl font-bold py-2 border-b border-gray-400">
             ₩{price}
           </p>
-          <p className="text-xl">{description}</p>
-          <form className="mt-7">
-            <label className="mr-2 text-brand" for="lang">
+          <p className="py-4 text-lg">{description}</p>
+          <div className="flex items-center">
+            <label className="text-brand font-bold" htmlFor="select">
               옵션:
             </label>
             <select
-              className="p-2 border border-brand mb-5"
-              name="size"
-              id="lang"
+              className="p-4 m-4 flex-1 border-2 border-dashed border-brand outline-none"
+              id="select"
+              onChange={handleSelect}
+              value={selected}
             >
-              <option value="javascript">JavaScript</option>
+              {options &&
+                options.map((size, index) => (
+                  <option key={index}>{size}</option>
+                ))}
             </select>
-          </form>
-          <Button text="장바구니에 추가" />
+          </div>
+          <Button text="장바구니에 추가" onClick={handleClick} />
         </div>
-      </article>
-    </section>
+      </section>
+    </>
   );
 }

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 // import { login, logout, onUserStateChange } from "../api/firebase";
 import User from "./User";
 import Button from "./ui/Button";
-import { useAuthContext } from "./context/AuthContext";
+import { useAuthContext } from "../context/AuthContext";
 
 export default function SearchHeader() {
   const { user, login, logout } = useAuthContext();

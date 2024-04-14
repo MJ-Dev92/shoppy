@@ -33,7 +33,7 @@ export default function MyCart() {
           <ul>
             {products &&
               products.map((product) => (
-                <CartItem key={product.id} product={product} />
+                <CartItem key={product.id} product={product} uid={uid} />
               ))}
           </ul>
           <div>

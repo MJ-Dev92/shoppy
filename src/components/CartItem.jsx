@@ -1,23 +1,35 @@
 import React from "react";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from "react-icons/ai";
-import { addOrUpdateToCart, removeFromCart } from "../api/firebase";
+// import { addOrUpdateToCart, removeFromCart } from "../api/firebase";
+import useCart from "../hooks/useCart";
 
 export default function CartItem({
   product,
   product: { id, image, title, options, quantity, price },
-  uid,
+  // uid,
 }) {
+  const { addOrUdateItem, removeItem } = useCart();
   const hadleMinus = () => {
     if (quantity < 2) return;
-    addOrUpdateToCart(uid, { ...product, quantity: quantity - 1 });
+    addOrUdateItem.mutate({ ...product, quantity: quantity - 1 });
   };
   const handlePlus = () => {
-    addOrUpdateToCart(uid, { ...product, quantity: quantity + 1 });
+    addOrUdateItem.mutate({ ...product, quantity: quantity + 1 });
   };
   const hadleDelete = () => {
-    removeFromCart(uid, id);
+    removeItem.mutate(id);
   };
+  // const hadleMinus = () => {
+  //   if (quantity < 2) return;
+  //   addOrUpdateToCart(uid, { ...product, quantity: quantity - 1 });
+  // };
+  // const handlePlus = () => {
+  //   addOrUpdateToCart(uid, { ...product, quantity: quantity + 1 });
+  // };
+  // const hadleDelete = () => {
+  //   removeFromCart(uid, id);
+  // };
   return (
     <li className="flex justify-between my-2 items-center">
       <img className="w-24 md:w-48 rounded-lg" src={image} alt={title} />

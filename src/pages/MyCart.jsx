@@ -1,20 +1,24 @@
 import React from "react";
-import { getCart } from "../api/firebase";
-import { useQuery } from "@tanstack/react-query";
-import { useAuthContext } from "../context/AuthContext";
+// import { getCart } from "../api/firebase";
+// import { useQuery } from "@tanstack/react-query";
+// import { useAuthContext } from "../context/AuthContext";
 import CartItem from "../components/CartItem";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { FaEquals } from "react-icons/fa";
 import PriceCard from "../components/PriceCard";
 import Button from "../components/ui/Button";
+import useCart from "../hooks/useCart";
 
 const SHIPPING = 3000;
 export default function MyCart() {
-  const { uid } = useAuthContext();
-  const { isLoding, data: products } = useQuery({
-    queryKey: ["carts"],
-    queryFn: () => getCart(uid),
-  });
+  // const { uid } = useAuthContext();
+  // const { isLoding, data: products } = useQuery({
+  //   queryKey: ["carts"],
+  //   queryFn: () => getCart(uid),
+  // });
+  const {
+    cartQuery: { isLoding, data: products },
+  } = useCart();
 
   if (isLoding) return <p>Loading...</p>;
   const hasProducts = products && products.length > 0;
@@ -36,7 +40,7 @@ export default function MyCart() {
           <ul className="border-b border-gray-300 mb-8 px-4 md:px-8 lg:px-16">
             {products &&
               products.map((product) => (
-                <CartItem key={product.id} product={product} uid={uid} />
+                <CartItem key={product.id} product={product} /* uid={uid} */ />
               ))}
           </ul>
           <div className="flex justify-between items-center mb-6 px-2 md:px-8">

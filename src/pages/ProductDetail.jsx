@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Button from "../components/ui/Button";
-import { useAuthContext } from "../context/AuthContext";
-import { addOrUpdateToCart } from "../api/firebase";
+// import { useAuthContext } from "../context/AuthContext";
+// import { addOrUpdateToCart } from "../api/firebase";
+import useCart from "../hooks/useCart";
 
 export default function ProductDetail() {
-  const { uid } = useAuthContext();
+  // const { uid } = useAuthContext();
+  const { addOrUpdateItem } = useCart();
   const {
     state: {
       product: { title, image, price, description, options, category, id },
@@ -19,7 +21,8 @@ export default function ProductDetail() {
   const handleClick = (e) => {
     // 여기 장바구니 추가
     const product = { id, image, title, price, options: selected, quantity: 1 };
-    addOrUpdateToCart(uid, product);
+    addOrUpdateItem.mutate(product);
+    // addOrUpdateToCart(uid, product);
   };
 
   return (
